@@ -6,6 +6,7 @@ RUN apt-get update && \
     apt-get -y install sudo git python-pip autoconf bison build-essential pkg-config bison flex autoconf unzip automake libtool make git python2.7 python-pip sqlite3 cmake python3 python3-pip wget
 RUN pip install flask flask-login pyserial pymodbus
 
+
 WORKDIR /home/
 RUN git clone https://github.com/thiagoralves/ScadaBR_Installer.git
 WORKDIR /home/ScadaBR_Installer/
@@ -35,6 +36,9 @@ RUN apt-get -y install adwaita-icon-theme at-spi2-core dconf-gsettings-backend d
 
 WORKDIR /home/selenium
 
+COPY host.sh /home/selenium
+
+COPY init.sh /home/selenium
 COPY chromedriver /home/selenium
 COPY loaddata.py /home/selenium
 COPY json2.txt /home/selenium
@@ -61,4 +65,4 @@ EXPOSE 502
 EXPOSE 8080
 EXPOSE 9090
 
-CMD ["/bin/bash", "/home/ScadaBR_Installer/run.sh"]
+CMD ["/bin/bash", "/home/selenium/init.sh"]
