@@ -8,8 +8,10 @@ RUN pip install flask flask-login pyserial pymodbus
 
 
 WORKDIR /home/
-RUN git clone https://github.com/thiagoralves/ScadaBR_Installer.git
+RUN git clone https://github.com/marcolucc/ScadaBR_Installer.git
 WORKDIR /home/ScadaBR_Installer/
+RUN sudo chmod +x install_scadabr.sh
+
 RUN sudo ./install_scadabr.sh linux
 
 COPY run.sh /home/ScadaBR_Installer/
@@ -31,6 +33,8 @@ RUN apt-get -y install adwaita-icon-theme at-spi2-core dconf-gsettings-backend d
   libxcb-shm0 libxcb-sync1 libxcomposite1 libxcursor1 libxdamage1 libxfixes3 libxft2 libxi6 libxinerama1 libxkbcommon0 libxml-parser-perl libxml-twig-perl libxml-xpathengine-perl libxmu6 libxpm4 \
   libxrandr2 libxrender1 libxshmfence1 libxt6 libxtst6 libxv1 libxxf86dga1 libxxf86vm1 perl-openssl-defaults ubuntu-mono ucf x11-common x11-utils x11-xserver-utils xdg-utils xkb-data
 
+RUN apt-get -y install nginx
+COPY default /etc/nginx/sites-available/default
 
 #RUN apt-get -y install fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 libcairo2 libcups2 libgbm1 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libxrandr2 libxshmfence1 xdg-utils
 
@@ -54,6 +58,8 @@ RUN sudo mv /home/selenium/chromedriver /usr/local/share/chromedriver && \
 RUN sudo chmod +x loaddata.py
 
 WORKDIR /home/ScadaBR_Installer/
+
+RUN sudo chmod +x update_scadabr.sh
 RUN sudo ./update_scadabr.sh
 
 #RUN sudo sudo /opt/tomcat6/apache-tomcat-6.0.53/bin/startup.sh
@@ -65,4 +71,5 @@ EXPOSE 502
 EXPOSE 8080
 EXPOSE 9090
 
-CMD ["/bin/bash", "/home/selenium/init.sh"]
+CMD ["/bin/bash", "/home/selenium/init.sh"] && ["nginx", "-g", "daemon off;"]
+
