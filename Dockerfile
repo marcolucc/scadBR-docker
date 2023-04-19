@@ -41,8 +41,9 @@ COPY default /etc/nginx/sites-available/default
 WORKDIR /home/selenium
 
 COPY host.sh /home/selenium
-
+RUN sudo chmod +x host.sh
 COPY init.sh /home/selenium
+RUN sudo chmod +x init.sh
 COPY chromedriver /home/selenium
 COPY loaddata.py /home/selenium
 COPY json2.txt /home/selenium
